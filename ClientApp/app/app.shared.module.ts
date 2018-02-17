@@ -10,6 +10,7 @@ import { HomeComponent } from './components/home/home.component';
 import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { TestComponent } from './components/test/test.component';
+import { ParentsComponent } from './components/parents/parents.component';
 
 @NgModule({
     declarations: [
@@ -18,7 +19,8 @@ import { TestComponent } from './components/test/test.component';
         CounterComponent,
         FetchDataComponent,
         HomeComponent,
-        TestComponent
+        TestComponent,
+        ParentsComponent
     ],
     imports: [
         CommonModule,
@@ -28,6 +30,7 @@ import { TestComponent } from './components/test/test.component';
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'test', component: TestComponent },
+            { path: 'parents', component: ParentsComponent },
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
             { path: '**', redirectTo: 'home' }

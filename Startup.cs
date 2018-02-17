@@ -16,6 +16,9 @@ namespace netdbdemo
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            var connectionString = Configuration.GetConnectionString("DemoDBContext");
+            services.AddEntityFrameworkNpgsql().AddDbContext<DemoDBContext>(options => options.UseNpgsql(connectionString));
         }
 
         public IConfiguration Configuration { get; }
