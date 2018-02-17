@@ -1,0 +1,95 @@
+Architecture:
+    Household    -   A PK, a 
+    AppSettings  -   A PK, a date field for the date that the settings were 
+                     applied, an int field for specifying the day of the week
+                     that shopping trips normally happen on, and an FK to the
+                     GoodBag that is to be used as the application's Pantry. 
+                     App always gets settings from the entry with the highest
+                     date
+
+    GoodType     -   A grocery item featuring a PK and a name. Is a generic
+                     catalog entry of potential items which can be instantiated
+                     via a GoodInstance into a pantry.
+
+    GoodInstance -   A grocery item featuring a PK, a quantity, an FK to a 
+                     GoodType, and an FK to the pantry that holds it. Means
+                     that the referenced Pantry contains quantity of the 
+                     referenced GoodType. Quantity may be fractional. should
+                     include methods to merge-sum with another good instance
+                     (from a shopping list, ex) or merge-remove with another
+                     good instance (from a recipe, ex). A good instance should
+                     drop itself from the table if its quantity hits zero or
+                     below. Should also have a field for quantity value (so 
+                     we can specify oz/count etc)
+
+    GoodBag -        A generic store of goods. Consists of a name and a PK.
+                     Goods have an FK to a pantry's PK. A pantry should never
+                     contain more than one GoodInstance of a given GoodType.
+                     Should include methods to merge-sum with another pantry
+                     (spawning a new GoodInstance if it didn't already have one)
+                     or merge-remove with another pantry (should ultimately
+                     call down to the merge-sum or merge-remove of its child
+                     GoodInstances)
+
+    Recipe -         PK, FK to a GoodBag of goods used in a recipe, and a varchar 
+                     for storing any instructions. 
+
+    MealItem -       Associates a recipe with a meal. Contains a meal FK and
+                     a Recipe FK to allow for a single meal to contain multiple
+                     recipes 
+
+    Meal   -         A PK and a date on which the meal is to be consumed. MealItem
+                     FKs form the collection of recipes that are used in a 
+                     given Meal 
+                     
+    GroceryTrip -    A PK, an FK to a GoodBag of the items to be purchased on
+                     the grocery trip, the date on which the GroceryTrip is 
+                     scheduled for, and the date that the GroceryTrip was 
+                     actually completed
+
+    PurchasedGood -  A PK and an FK to a GoodInstance in a GoodBag belonging
+                     to a GroceryTrip. Its existance indicates that the linked
+                     GoodInstance was, in fact, purchased on the GroceryTrip.
+
+-Make a merge with a good instance only update the quantity on the target good 
+ instance object to the good instance that was merged in 
+ and make the final update of the good instance into the database a seperate 
+ 'apply' action which both writes the good quantity back to the DB. This way,
+ we can do speculative merges of items without modifying the current content
+ of the pantry and do forward and reverse history by merging the good bags of
+ all recipes 
+-Source good instances should never be dropped or removed from their parent
+ by merging them into another instance. Merge effect should be one-way so that
+ we don't, ex, delete items from a recipe
+-Give GoodBags a 'reset merges' option that reloads the GoodBag's GoodInstance
+ collection from the database so that speculative merges can be rolled back.
+-Grocery trip interface list has checkboxes for items purchased and a button
+ for 'done shopping' that commits all of the checked items to the PurchasedGood
+ table 
+-Grocery trip UI should always show needed items that have not yet been
+ purchased (excluding items from any future scheduled shopping date) so that
+ they may be marked purchased and moved to the pantry later in the week
+
+    Useful functions:
+        Shopping list construction - Given what the current state of the 
+                                     pantry is calculated to be on the date
+                                     of a given shopping day, the shopping 
+                                     list for that upcoming grocery trip is
+                                     dynamically regenerated based on the
+                                     current pantry content and the required
+                                     goodinstance quantities of all meals 
+                                     scheduled between today and the the
+                                     grocery trip whenever a meal is scheduled.
+                                     
+        Manual item drop - When viewing the pantry, allow for the option to
+                           'drop' 
+        Recipes you can make - selects all recipes whose good bag only contains
+                               good instances with quantities less than or equal
+
+UI:
+----
+Unified and universal GoodType selection widget (for adding a GoodInstance to a 
+GoodBag) which provides option for generating a new GoodType 
+
+Unified interface for GoodBags that can be used by all pages that need
+to display and manipulate a GoodBag (GoodBagView?)
