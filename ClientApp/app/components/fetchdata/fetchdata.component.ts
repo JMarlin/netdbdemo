@@ -20,4 +20,5 @@ interface WeatherForecast {
     temperatureC: number;
     temperatureF: number;
     summary: string;
+    alwaysR: string;
 }

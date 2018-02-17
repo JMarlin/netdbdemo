@@ -15,6 +15,8 @@ namespace netdbdemo.Models
         public int TemperatureC { get; set; }
         public string Summary { get; set; }
 
+        public string AlwaysR = "R";
+
         public static WeatherForecast NewRandom() {
 
             var rng = new Random();
