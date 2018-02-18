@@ -3,7 +3,7 @@ using System;
 namespace netdbdemo.Models
 {
 
-    public class Parents
+    public class WeatherForecast
     {
 
         private static string[] Summaries = new[]

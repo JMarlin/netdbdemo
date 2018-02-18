@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace netdbdemo
 {
@@ -16,9 +18,6 @@ namespace netdbdemo
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
-            var connectionString = Configuration.GetConnectionString("DemoDBContext");
-            services.AddEntityFrameworkNpgsql().AddDbContext<DemoDBContext>(options => options.UseNpgsql(connectionString));
         }
 
         public IConfiguration Configuration { get; }

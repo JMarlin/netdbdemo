@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace netdbdemo.Controllers
 {
@@ -14,10 +15,9 @@ namespace netdbdemo.Controllers
         public IEnumerable<Models.Parent> Parents()
         {
 
-            using(var db = new DemoDBContext()) {
+            var db = new Models.DemoDBContext();
             
-                return db.Parents;
-            } 
+            return db.Parents; 
         }
     }
 }

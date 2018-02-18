@@ -1,19 +1,22 @@
 using System;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace netdbdemo.Models {
 
+    [Table("parents")]
     public class Parent {
 
         [Column]
         public int id { get; set; }
 
-        [Column]
+        [Column("firstname")]
         public string FirstName { get; set; }
 
-        [Column]
+        [Column("lastname")]
         public string LastName { get; set; }
 
-        [Column]
+        [Column("age")]
         public int Age { get; set; }
     }
 }
